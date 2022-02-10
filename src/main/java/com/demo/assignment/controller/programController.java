@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.demo.assignment.entity.programEntity;
 //import com.demo.assignment.exception.ResourceNotFoundException;
 import com.demo.assignment.repo.programRepository;
+import com.demo.assignment.service.programService;
 
 
 
@@ -33,60 +34,22 @@ import com.demo.assignment.repo.programRepository;
 public class programController {
 	
 	@Autowired
-	programRepository programRepo;
+	programRepository progRepo;
+	
+	@Autowired
+	programService progService;
 	
 	//get list of programs
 	@GetMapping(value = "/allPrograms")
 	private ResponseEntity<?> getPrograms() //throws ResourceNotFoundException   
 	{ 
 		System.out.println("in getall programs");
-		List<programEntity> programList= programRepo.findAll();
+		//List<programEntity> programList= progRepo.findAll();
+		List<programEntity> programList = progService.getAllPrograms();
 		
 		
 		return ResponseEntity.ok(programList);  
 	}  
 	
-	//get program using programId
-	@GetMapping(value = "/programs/{programId}", produces = "application/json") 
-	private ResponseEntity <?> getOneProgram(@PathVariable("programId") @NotBlank @Positive Integer programId) //throws ResourceNotFoundException
-	{  
-		System.out.println("in get by programId");
-	return ResponseEntity.ok().body(programRepo.findById(programId).get());
-		
-	}  
 	
-	//creating post  that saves the program detail in the database
-	@PostMapping(path="/program",consumes = "application/json", produces = "application/json")
-		public ResponseEntity <?> createAndSaveProgram(programEntity program) //throws  ProgramAlreadyExistsException
-		{
-		
-		System.out.println("in save new program");
-			 programEntity saveEntity= programRepo.save(program);
-			 
-				return ResponseEntity.ok(saveEntity); 
-			
-		}
-	
-	//creating put mapping that updates the program detail by programId  
-			@PutMapping(path="/programs/{programId}", consumes = "application/json", produces = "application/json")  
-			@ResponseBody
-			private ResponseEntity <?> updateProgramById(@PathVariable("programId")@NotBlank @Positive Integer programId ,@Valid @RequestBody programEntity modifyProgram) //throws ProgramAlreadyExistsException  
-			{  
-				System.out.println("in update program");
-			return ResponseEntity.ok(programRepo.save(modifyProgram));
-			} 
-			
-			//creating a delete mapping that deletes a specified program  
-			@DeleteMapping(path="/programs/{programId}", consumes = "application/json",produces = "application/json")  
-			@ResponseBody
-			private ResponseEntity<?>  deleteByProgramId(@PathVariable("programId")@NotBlank @Positive Integer programId)   
-			{  
-				System.out.println("in delete program");
-				programRepo.deleteById(programId);
-					
-				List<programEntity> programList= programRepo.findAll();
-				return ResponseEntity.ok(programList);
-				
-			
-			}  
 }
