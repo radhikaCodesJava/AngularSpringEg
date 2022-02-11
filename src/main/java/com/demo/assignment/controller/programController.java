@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.assignment.entity.programEntity;
+import com.demo.assignment.model.programDTO;
 //import com.demo.assignment.exception.ResourceNotFoundException;
 import com.demo.assignment.repo.programRepository;
 import com.demo.assignment.service.programService;
@@ -45,7 +46,7 @@ public class programController {
 	{ 
 		System.out.println("in getall programs");
 		//List<programEntity> programList= progRepo.findAll();
-		List<programEntity> programList = progService.getAllPrograms();
+		List<programDTO> programList = progService.getAllPrograms();
 		
 		
 		return ResponseEntity.ok(programList);  

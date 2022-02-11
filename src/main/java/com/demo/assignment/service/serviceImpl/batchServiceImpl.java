@@ -24,8 +24,9 @@ public class batchServiceImpl implements batchService {
 	public List<batchDTO> getAllBatches()  
 	{
 		List<batchEntity> batchEntityList= batchRepo.findAll();
+		
 		return (batchMap.toBatchDTOList(batchEntityList));
-		//return batchEntityList;
+		
 		
 	}
 	

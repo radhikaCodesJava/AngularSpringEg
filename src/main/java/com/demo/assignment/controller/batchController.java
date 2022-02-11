@@ -42,8 +42,8 @@ public class batchController {
 		{
 		System.out.println("in get batches by Id method");
 		//batchEntity batchEntity= batchRepo.getById(batchId);
-		batchDTO batchEntity= batchService.getBatchesById(batchId);
-		return ResponseEntity.ok(batchEntity);
+		batchDTO batchDTO= batchService.getBatchesById(batchId);
+		return ResponseEntity.ok(batchDTO);
 		
 		
 		}
