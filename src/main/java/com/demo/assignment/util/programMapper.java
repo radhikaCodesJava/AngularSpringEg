@@ -16,7 +16,7 @@ public interface programMapper {
 	
 programDTO toProgramDTO(programEntity savedEntity);
 	
-	programEntity toProgramEntity(batchDTO batchDTO);
+	programEntity toProgramEntity(programDTO progDTO);
 	 
    	List<programDTO> toProgramDTOList(List<programEntity> programEntities);
 	 

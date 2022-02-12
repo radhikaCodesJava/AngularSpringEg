@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-02-11T11:05:14-0800",
+    date = "2022-02-11T17:32:33-0800",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.2 (Oracle Corporation)"
 )
 @Component
@@ -23,6 +23,16 @@ public class batchMapperImpl implements batchMapper {
 
         batchDTO batchDTO = new batchDTO();
 
+        batchDTO.setBatch_id( savedEntity.getBatch_id() );
+        batchDTO.setBatch_name( savedEntity.getBatch_name() );
+        batchDTO.setBatch_description( savedEntity.getBatch_description() );
+        batchDTO.setBatch_status( savedEntity.getBatch_status() );
+        if ( savedEntity.getBatch_num_classes() != null ) {
+            batchDTO.setBatch_num_classes( savedEntity.getBatch_num_classes() );
+        }
+        batchDTO.setCreation_time( savedEntity.getCreation_time() );
+        batchDTO.setLast_modified_time( savedEntity.getLast_modified_time() );
+
         return batchDTO;
     }
 
@@ -34,17 +44,25 @@ public class batchMapperImpl implements batchMapper {
 
         batchEntity batchEntity = new batchEntity();
 
+        batchEntity.setBatch_id( batchDTO.getBatch_id() );
+        batchEntity.setBatch_name( batchDTO.getBatch_name() );
+        batchEntity.setBatch_description( batchDTO.getBatch_description() );
+        batchEntity.setBatch_status( batchDTO.getBatch_status() );
+        batchEntity.setBatch_num_classes( batchDTO.getBatch_num_classes() );
+        batchEntity.setCreation_time( batchDTO.getCreation_time() );
+        batchEntity.setLast_modified_time( batchDTO.getLast_modified_time() );
+
         return batchEntity;
     }
 
     @Override
-    public List<batchDTO> toBatchDTOList(List<batchEntity> batcgEntities) {
-        if ( batcgEntities == null ) {
+    public List<batchDTO> toBatchDTOList(List<batchEntity> batchEntities) {
+        if ( batchEntities == null ) {
             return null;
         }
 
-        List<batchDTO> list = new ArrayList<batchDTO>( batcgEntities.size() );
-        for ( batchEntity batchEntity : batcgEntities ) {
+        List<batchDTO> list = new ArrayList<batchDTO>( batchEntities.size() );
+        for ( batchEntity batchEntity : batchEntities ) {
             list.add( toBatchDTO( batchEntity ) );
         }
 

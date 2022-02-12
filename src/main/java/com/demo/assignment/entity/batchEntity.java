@@ -28,7 +28,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-@Builder
 @Entity
 @Table(name="tbl_lms_batch")
 public class batchEntity implements Serializable{

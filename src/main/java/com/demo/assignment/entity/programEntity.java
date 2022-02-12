@@ -39,7 +39,7 @@ public class programEntity implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	
-	public programEntity(@NonNull Integer program_id, @NonNull String program_name, @NonNull String program_description,
+	/*public programEntity(@NonNull Integer program_id, @NonNull String program_name, @NonNull String program_description,
 			@NonNull String program_status, @NonNull Timestamp creation_time, @NonNull Timestamp last_mod_time) {
 		super();
 		this.program_id = program_id;
@@ -48,7 +48,7 @@ public class programEntity implements Serializable{
 		this.program_status = program_status;
 		this.creation_time = creation_time;
 		this.last_mod_time = last_mod_time;
-	}
+	}*/
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)//, generator = "program_id_seq")

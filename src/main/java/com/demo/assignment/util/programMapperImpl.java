@@ -1,9 +1,8 @@
 package com.demo.assignment.util;
 
+import com.demo.assignment.entity.batchEntity;
 import com.demo.assignment.entity.programEntity;
-import com.demo.assignment.model.batchDTO;
 import com.demo.assignment.model.programDTO;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-02-11T11:05:14-0800",
+    date = "2022-02-11T17:32:33-0800",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.2 (Oracle Corporation)"
 )
 @Component
@@ -25,23 +24,38 @@ public class programMapperImpl implements programMapper {
 
         programDTO programDTO = new programDTO();
 
+        programDTO.setProgram_id( savedEntity.getProgram_id() );
+        programDTO.setProgram_name( savedEntity.getProgram_name() );
+        programDTO.setProgram_description( savedEntity.getProgram_description() );
+        programDTO.setProgram_status( savedEntity.getProgram_status() );
+        programDTO.setCreation_time( savedEntity.getCreation_time() );
+        programDTO.setLast_mod_time( savedEntity.getLast_mod_time() );
+        List<batchEntity> list = savedEntity.getListOfBatchIds();
+        if ( list != null ) {
+            programDTO.setListOfBatchIds( new ArrayList<batchEntity>( list ) );
+        }
+
         return programDTO;
     }
 
     @Override
-    public programEntity toProgramEntity(batchDTO batchDTO) {
-        if ( batchDTO == null ) {
+    public programEntity toProgramEntity(programDTO progDTO) {
+        if ( progDTO == null ) {
             return null;
         }
 
-        Integer program_id = null;
-        String program_name = null;
-        String program_description = null;
-        String program_status = null;
-        Timestamp creation_time = null;
-        Timestamp last_mod_time = null;
+        programEntity programEntity = new programEntity();
 
-        programEntity programEntity = new programEntity( program_id, program_name, program_description, program_status, creation_time, last_mod_time );
+        programEntity.setProgram_id( progDTO.getProgram_id() );
+        programEntity.setProgram_name( progDTO.getProgram_name() );
+        programEntity.setProgram_description( progDTO.getProgram_description() );
+        programEntity.setProgram_status( progDTO.getProgram_status() );
+        programEntity.setCreation_time( progDTO.getCreation_time() );
+        programEntity.setLast_mod_time( progDTO.getLast_mod_time() );
+        List<batchEntity> list = progDTO.getListOfBatchIds();
+        if ( list != null ) {
+            programEntity.setListOfBatchIds( new ArrayList<batchEntity>( list ) );
+        }
 
         return programEntity;
     }
@@ -68,26 +82,9 @@ public class programMapperImpl implements programMapper {
 
         List<programEntity> list = new ArrayList<programEntity>( programDTOs.size() );
         for ( programDTO programDTO : programDTOs ) {
-            list.add( programDTOToprogramEntity( programDTO ) );
+            list.add( toProgramEntity( programDTO ) );
         }
 
         return list;
-    }
-
-    protected programEntity programDTOToprogramEntity(programDTO programDTO) {
-        if ( programDTO == null ) {
-            return null;
-        }
-
-        Integer program_id = null;
-        String program_name = null;
-        String program_description = null;
-        String program_status = null;
-        Timestamp creation_time = null;
-        Timestamp last_mod_time = null;
-
-        programEntity programEntity = new programEntity( program_id, program_name, program_description, program_status, creation_time, last_mod_time );
-
-        return programEntity;
     }
 }

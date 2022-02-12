@@ -18,7 +18,7 @@ public interface batchMapper {
 	
 	batchEntity toBatchEntity(batchDTO batchDTO);
 	 
-   	List<batchDTO> toBatchDTOList(List<batchEntity> batcgEntities);
+   	List<batchDTO> toBatchDTOList(List<batchEntity> batchEntities);
 	 
 	 List<batchEntity> toBatchEntityList(List<batchDTO> batchDTOs);
 
