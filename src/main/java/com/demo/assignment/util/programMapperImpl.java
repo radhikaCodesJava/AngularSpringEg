@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-02-11T17:32:33-0800",
+    date = "2022-02-11T18:57:52-0800",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.2 (Oracle Corporation)"
 )
 @Component
@@ -75,7 +75,7 @@ public class programMapperImpl implements programMapper {
     }
 
     @Override
-    public List<programEntity> toBatchEntityList(List<programDTO> programDTOs) {
+    public List<programEntity> toPogramEntityList(List<programDTO> programDTOs) {
         if ( programDTOs == null ) {
             return null;
         }

@@ -6,7 +6,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import com.demo.assignment.entity.programEntity;
-import com.demo.assignment.model.batchDTO;
 import com.demo.assignment.model.programDTO;
 
 @Mapper(componentModel = "spring", implementationPackage = "com.demo.assignment.util")
@@ -20,6 +19,6 @@ programDTO toProgramDTO(programEntity savedEntity);
 	 
    	List<programDTO> toProgramDTOList(List<programEntity> programEntities);
 	 
-	 List<programEntity> toBatchEntityList(List<programDTO> programDTOs);
+	 List<programEntity> toPogramEntityList(List<programDTO> programDTOs);
 
 }

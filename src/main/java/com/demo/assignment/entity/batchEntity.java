@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.data.relational.core.mapping.Embedded;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -75,5 +77,6 @@ public class batchEntity implements Serializable{
 	@ManyToOne(fetch= FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name="batch_program_id", insertable=false, updatable=false,referencedColumnName = "program_id", unique = true,nullable=false)
 	@JsonIgnore
+	@javax.persistence.Embedded
 	private programEntity programEntity_batch;
 }

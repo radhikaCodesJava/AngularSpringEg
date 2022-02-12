@@ -6,7 +6,6 @@ import javax.validation.constraints.Positive;
 
 import org.springframework.stereotype.Service;
 
-import com.demo.assignment.entity.batchEntity;
 import com.demo.assignment.model.batchDTO;
 
 @Service

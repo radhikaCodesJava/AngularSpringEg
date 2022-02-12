@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 import javax.validation.constraints.NotNull;
 
-import com.demo.assignment.entity.programEntity;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,5 +23,5 @@ public class batchDTO {
 	private int batch_num_classes;
 	private Timestamp creation_time;
 	private Timestamp last_modified_time;
-	private programEntity batch_program_id;
+	private Integer batch_program_id;
 }
