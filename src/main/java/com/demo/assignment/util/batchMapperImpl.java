@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-02-11T18:57:52-0800",
+    date = "2022-02-14T12:09:21-0800",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.2 (Oracle Corporation)"
 )
 @Component
@@ -24,7 +24,7 @@ public class batchMapperImpl implements batchMapper {
 
         batchDTO batchDTO = new batchDTO();
 
-        batchDTO.setBatch_program_id( savedEntityProgramEntity_batchProgram_id( savedEntity ) );
+        batchDTO.setBatch_program_id( savedEntityProgramEntity_batchProgramId( savedEntity ) );
         batchDTO.setBatch_id( savedEntity.getBatch_id() );
         batchDTO.setBatch_name( savedEntity.getBatch_name() );
         batchDTO.setBatch_description( savedEntity.getBatch_description() );
@@ -85,7 +85,7 @@ public class batchMapperImpl implements batchMapper {
         return list;
     }
 
-    private Integer savedEntityProgramEntity_batchProgram_id(batchEntity batchEntity) {
+    private Integer savedEntityProgramEntity_batchProgramId(batchEntity batchEntity) {
         if ( batchEntity == null ) {
             return null;
         }
@@ -93,10 +93,10 @@ public class batchMapperImpl implements batchMapper {
         if ( programEntity_batch == null ) {
             return null;
         }
-        Integer program_id = programEntity_batch.getProgram_id();
-        if ( program_id == null ) {
+        Integer programId = programEntity_batch.getProgramId();
+        if ( programId == null ) {
             return null;
         }
-        return program_id;
+        return programId;
     }
 }

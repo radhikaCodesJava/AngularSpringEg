@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -54,7 +55,7 @@ public class programEntity implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)//, generator = "program_id_seq")
 	@Column(name="program_id")//,nullable=false, unique=true, insertable=true, updatable=false)
 	@NonNull
-    private Integer program_id;
+    private Integer programId;
 
 	@Column(name="program_name")//, nullable=false,unique=true, insertable=true, updatable=false)
 	@NonNull
@@ -79,6 +80,7 @@ public class programEntity implements Serializable{
 	
 	@OneToMany(targetEntity = batchEntity.class, mappedBy="programEntity_batch", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
+	//@Embedded  
 	private List<batchEntity> listOfBatchIds;// =new ArrayList<batchEntity>();
 
 	

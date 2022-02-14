@@ -15,7 +15,7 @@ public interface batchMapper {
 	
 	batchMapper INSTANCE = Mappers.getMapper(batchMapper.class);
 	
-	@Mapping(target="batch_program_id", source="programEntity_batch.program_id")
+	@Mapping(target="batch_program_id", source="programEntity_batch.programId")
 	batchDTO toBatchDTO(batchEntity savedEntity);
 	
 	

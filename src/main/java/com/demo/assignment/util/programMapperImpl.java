@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-02-11T18:57:52-0800",
+    date = "2022-02-14T12:09:21-0800",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.2 (Oracle Corporation)"
 )
 @Component
@@ -24,7 +24,7 @@ public class programMapperImpl implements programMapper {
 
         programDTO programDTO = new programDTO();
 
-        programDTO.setProgram_id( savedEntity.getProgram_id() );
+        programDTO.setProgram_id( savedEntity.getProgramId() );
         programDTO.setProgram_name( savedEntity.getProgram_name() );
         programDTO.setProgram_description( savedEntity.getProgram_description() );
         programDTO.setProgram_status( savedEntity.getProgram_status() );
@@ -46,7 +46,7 @@ public class programMapperImpl implements programMapper {
 
         programEntity programEntity = new programEntity();
 
-        programEntity.setProgram_id( progDTO.getProgram_id() );
+        programEntity.setProgramId( progDTO.getProgram_id() );
         programEntity.setProgram_name( progDTO.getProgram_name() );
         programEntity.setProgram_description( progDTO.getProgram_description() );
         programEntity.setProgram_status( progDTO.getProgram_status() );
