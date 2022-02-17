@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class programDTO {
-	@NotNull(message="programID should not be null")
+	//@NotNull(message="programID should not be null")
 	private Integer program_id;
-	@NotNull(message="programName should not be empty")
+	//@NotNull(message="programName should not be empty")
 	private String program_name;
 	private String program_description;
 	private String program_status;

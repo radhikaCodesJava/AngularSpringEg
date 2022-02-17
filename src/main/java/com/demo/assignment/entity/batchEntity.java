@@ -25,10 +25,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @Entity
 @Table(name="tbl_lms_batch")
@@ -44,16 +46,14 @@ public class batchEntity implements Serializable{
 
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "batch_Entity_id")
-	@SequenceGenerator(name="batch_Id", sequenceName = "batch_table_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "batch_seq_id")
+	@SequenceGenerator(name="batch_seq_id", sequenceName = "tbl_lms_batch_batch_id_seq", allocationSize = 1)
 	@Column( name = "batch_id" )
-	@NonNull
 	private Integer batch_id;
 	
 	
 	
 	@Column( name = "batch_name" )
-	@NonNull
 	private String batch_name;
 	
 	@Column( name = "batch_description" )
@@ -74,8 +74,8 @@ public class batchEntity implements Serializable{
 	@Column(name="last_mod_time")
 	private Timestamp last_modified_time;
 	
-	@ManyToOne(fetch= FetchType.LAZY,cascade = CascadeType.ALL)
-	@JoinColumn(name="batch_program_id", insertable=false, updatable=false,referencedColumnName = "program_id", unique = true,nullable=false)
+	@ManyToOne//(fetch= FetchType.LAZY,cascade = CascadeType.ALL)
+	@JoinColumn(name="batch_program_id", nullable=false)//,insertable=false, updatable=false,referencedColumnName = "program_id", unique = true)
 	//@JsonIgnore
 	@javax.persistence.Embedded
 	private programEntity programEntity_batch;

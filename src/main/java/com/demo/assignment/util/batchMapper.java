@@ -2,6 +2,7 @@ package com.demo.assignment.util;
 
 import java.util.List;
 
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -18,7 +19,7 @@ public interface batchMapper {
 	@Mapping(target="batch_program_id", source="programEntity_batch.programId")
 	batchDTO toBatchDTO(batchEntity savedEntity);
 	
-	
+	@InheritInverseConfiguration
 	batchEntity toBatchEntity(batchDTO batchDTO);
 	 
    	List<batchDTO> toBatchDTOList(List<batchEntity> batchEntities);

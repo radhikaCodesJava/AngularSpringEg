@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class batchDTO {
-	@NotNull(message="batchID should not be null")
+	//@NotNull(message="batchID should not be null")
 	private Integer batch_id;
 	@NotNull(message="batchname should not be null")
 	private String batch_name;

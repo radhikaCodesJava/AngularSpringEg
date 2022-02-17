@@ -16,14 +16,14 @@ public interface programService {
 		//get by id
 		public programDTO getProgramsById(Integer programId);// throws ResourceNotFoundException;
 		//post
-		//public programDTO createAndSaveProgram(programDTO program);// throws  ResourceAlreadyExistsExceptions;
+		public programDTO createAndSaveProgram(programDTO program);// throws  ResourceAlreadyExistsExceptions;
 		//update based on programId
-		//public programDTO updateProgramById(Integer programId,programDTO programs);// throws ResourceAlreadyExistsExceptions;
+		public programDTO updateProgramById(Integer programId,programDTO programs);// throws ResourceAlreadyExistsExceptions;
 		//update based on programName
-		//public programDTO updateProgramByName(String programName,programDTO programs);// throws ResourceAlreadyExistsExceptions;
+		public programDTO updateProgramByName(String programName,programDTO programs);// throws ResourceAlreadyExistsExceptions;
 		//delete by programId
-		//public Boolean deleteByProgramId(Integer programId);// throws ResourceNotFoundException;
+		public boolean deleteByProgramId(Integer programId);// throws ResourceNotFoundException;
 		//delete by programName
-		//public List<programDTO> deleteByProgramName(String programName);// throws ResourceNotFoundException;
+		public boolean deleteByProgramName(String programName);// throws ResourceNotFoundException;
 
 }

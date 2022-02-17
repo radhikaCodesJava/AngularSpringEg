@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -52,33 +53,28 @@ public class programEntity implements Serializable{
 	}*/
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)//, generator = "program_id_seq")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "program_id_seq")
+	@SequenceGenerator(name="program_id_seq", sequenceName = "tbl_lms_program_program_id_seq", allocationSize = 1)
 	@Column(name="program_id")//,nullable=false, unique=true, insertable=true, updatable=false)
-	@NonNull
-    private Integer programId;
+	private Integer programId;
 
 	@Column(name="program_name")//, nullable=false,unique=true, insertable=true, updatable=false)
-	@NonNull
 	private String program_name;
 
 	@Column(name="program_description")
-	@NonNull
-    private String program_description;
+	private String program_description;
 
 	@Column(name="program_status")
-	@NonNull
 	private String program_status;
 
 	@Column(name="creation_time")
-	@NonNull
 	private Timestamp creation_time;
 
 	@Column(name="last_mod_time")
-	@NonNull
 	private Timestamp last_mod_time;
 
 	
-	@OneToMany(targetEntity = batchEntity.class, mappedBy="programEntity_batch", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(targetEntity = batchEntity.class, mappedBy="programEntity_batch")//, cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	//@Embedded  
 	private List<batchEntity> listOfBatchIds;// =new ArrayList<batchEntity>();
