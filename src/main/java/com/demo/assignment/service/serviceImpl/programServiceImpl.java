@@ -70,14 +70,7 @@ public class programServiceImpl implements programService{
 				 //throw new ProgramNotFoundException("program with id"+programId +"not found");
 					 System.out.println("program with "+ programId+"not found");
 				else {
-			    /*updateLMSProgram= programRepository.findById(programId).get();
-				updateLMSProgram.setProgram_name(programs.getProgram_name());
-				updateLMSProgram.setProgram_description(programs.getProgram_description());
-				updateLMSProgram.setProgram_status(programs.getProgram_status());
-				updateLMSProgram.setCreation_time(programs.getCreation_time());
-				updateLMSProgram.setLast_mod_time(programs.getLast_mod_time());*/
 			    
-					 //updateLMSProgramEntity= progMap.toProgramEntity(program);
 					updateLMSProgramEntity= progRepo.findById(programId).get();
 					updateLMSProgramEntity.setProgram_name(program.getProgram_name());
 					updateLMSProgramEntity.setProgram_description(program.getProgram_description());
@@ -124,11 +117,9 @@ public class programServiceImpl implements programService{
 			{
 				 System.out.println("in delete program by id method");
 				 programEntity progEntity= progRepo.findById(programId).get();
-				 boolean value=progRepo.findById(programId).isEmpty();
-				 /* value is false, means rec exists with programId
-				  * value is true, means rec does not exists with programId */
-				 
-				 if(!(value)) //isempty() returns false if value is present.
+				 				 
+				 Boolean value= progRepo.existsById(programId);
+				 if(value) 
 					 progRepo.delete(progEntity);
 				else 
 				 System.out.println("program with this id"+programId+ "is not found");

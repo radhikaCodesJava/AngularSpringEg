@@ -92,11 +92,11 @@ public class programController {
 			@DeleteMapping(path="/deletebyprogid/{programId}",produces = "application/json")  
 			@ResponseBody
 			private ResponseEntity<?>  deleteByProgramId(@PathVariable("programId")@NotBlank @Positive Integer programId)   
-			{  boolean deleted;
-			boolean value;
+			{  
+			
 				System.out.println("in delete by programID controller");
-				value = progService.deleteByProgramId(programId); 
-				deleted = !value;
+				boolean deleted = progService.deleteByProgramId(programId); 
+				
 				if(deleted)
 					
 					return ResponseEntity.status(HttpStatus.OK).build();

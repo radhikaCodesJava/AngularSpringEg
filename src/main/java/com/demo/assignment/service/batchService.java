@@ -14,7 +14,7 @@ public interface batchService {
 	
 	public batchDTO getBatchById(@Positive Integer batchId);
 	
-	//public List<batchDTO> getBatchAllBatchesById(Integer batchId);
+	public List<batchDTO> getBatchEntitesByProgramId(Integer batch_program_id);
 	
 	public batchDTO createNewBatch(batchDTO batchDTO); //throws DuplicateBatchException;
 	

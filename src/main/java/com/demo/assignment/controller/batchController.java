@@ -55,17 +55,18 @@ public class batchController {
 		}
 	
 	//get list of batches given programId
-	/*@GetMapping ( path = "/batches/{batchId}", produces = "application/json")
-	public ResponseEntity<?> getAllBatchesById(@PathVariable(value="batchId") @Positive Integer batchId)//throws ResourceNotFoundException {
+	@GetMapping ( path = "/batchesByProgramId/{batch-programId}", produces = "application/json")
+	public ResponseEntity<?> getAllBatchesByBatchProgramId(@PathVariable(value="batch-programId") @Positive Integer batch_program_id)//throws ResourceNotFoundException {
 		{
 		System.out.println("in getAll batches by Id method");
-		//batchEntity batchEntity= batchRepo.getById(batchId);
-		batchDTO batchDTO= batchService.getBatchAllBatchesById(batchId);
-		
-		return ResponseEntity.ok(batchDTO);
+		//get list of batch entites with given batch-program-Id from req object
+		List<batchDTO> batchDTOList= batchService.getBatchEntitesByProgramId(batch_program_id);
 		
 		
-		}*/
+		return ResponseEntity.ok(batchDTOList);
+		
+		
+		}
 	
 	
 	@PostMapping ( path = "/batches", consumes = "application/json", produces = "application/json")
@@ -81,6 +82,7 @@ public class batchController {
 	
 	@PutMapping ( path = "/putbatch/{batchId}", consumes = "application/json", produces = "application/json" )
 	public ResponseEntity<?> updateBatch(@PathVariable(value="batchId") @Positive Integer batchId, @Valid @RequestBody batchDTO batchDTODetail) throws Exception {
+		System.out.println("in update Batch controller");
 		return ResponseEntity.ok(batchService.updateBatchById(batchId,batchDTODetail));
 		
 	}
@@ -89,7 +91,8 @@ public class batchController {
 	@DeleteMapping ( path = "/deletebatchbyid/{batchId}", produces = "application/json" )
 	public ResponseEntity<?> deleteBatchById(@PathVariable(value="batchId") @Positive Integer batchId) //throws ResourceNotFoundException {
 	{
-		  Boolean deleted = batchService.deleteByBatchId(batchId); ;
+		  Boolean deleted = batchService.deleteByBatchId(batchId); 
+		 
 		try {
 		
 		if(deleted)
@@ -107,7 +110,8 @@ public class batchController {
 		}
 		}
 	
-		@DeleteMapping ( path = "/deletebatchbyname/{batchName}", produces = "application/json" )
+	// batchName is not unique in batchTable. there are repeating batchnames.
+		/*@DeleteMapping ( path = "/deletebatchbyname/{batchName}", produces = "application/json" )
 		public ResponseEntity<?> deleteBatchByName(@PathVariable(value="batchId") @Positive String batchName) //throws ResourceNotFoundException {
 		{
 			  Boolean deleted = batchService.deleteBybatchName(batchName);;
@@ -123,7 +127,7 @@ public class batchController {
 				//System.out.println("Exception : " + e.getMessage());
 		finally {
 			System.out.println("in fianlly of deletebyName");
-		}
+		}*/
 	}
-}
+
 

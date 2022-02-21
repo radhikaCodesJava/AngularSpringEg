@@ -43,16 +43,16 @@ public class batchServiceImpl implements batchService {
 	}
 	
 	
-	//getall batches by programName
+	//getall batches by batch_program_id
+	public List<batchDTO> getBatchEntitesByProgramId(Integer batch_program_id)
 		
-	/*public List<batchDTO> getBatchAllBatchesById(Integer batchId)  
 	{
-		List<batchEntity> batchEntityList= batchRepo.(Iterable<batchId>);
+		List<batchEntity> batchEntityList= batchRepo.findAllByBatch_ProgramId( batch_program_id );
 		
 		return (batchMap.toBatchDTOList(batchEntityList));
 		
 		
-	}*/
+	}
 	
 	
 	//creating post  that saves the Batch detail in the database  
@@ -69,9 +69,9 @@ public class batchServiceImpl implements batchService {
 				List<batchEntity> result = batchRepo.findByBatch_nameAndBatch_program_id(newBatchEntity.getBatch_name(), (newBatchEntity.getProgramEntity_batch()).getProgramId());
 				if(!(result.size()>0)) {
 					//save the new batch details in repository since this combination is new
-					//set the program name 
+					//set the program entiy details to batch (as one entity has other entity) 
 					progEntity = progRepo.findById(program_batchId).get();
-				//newBatchEntity.getProgramEntity_batch().setProgram_name(progEntity.getProgram_name());
+				
 					newBatchEntity.setProgramEntity_batch(progEntity);
 				System.out.println("newBatchEntity : " + newBatchEntity.toString());
 							newCreatedBatch= batchRepo.save(newBatchEntity);
@@ -105,8 +105,21 @@ public class batchServiceImpl implements batchService {
 				
 				if(isPresentTrue)
 				{
-					updateLMSBatchEntity= batchRepo.save(batchEntity);
-					 savedBatchDTO = batchMap.toBatchDTO(updateLMSBatchEntity);
+					updateLMSBatchEntity = batchRepo.getById(batchId);
+					updateLMSBatchEntity.setBatch_name(modifyBatch.getBatch_name());
+					updateLMSBatchEntity.setBatch_description(modifyBatch.getBatch_description());
+					updateLMSBatchEntity.setBatch_num_classes(modifyBatch.getBatch_num_classes());
+					updateLMSBatchEntity.setBatch_status(modifyBatch.getBatch_status());
+					updateLMSBatchEntity.setCreation_time(modifyBatch.getCreation_time());
+					updateLMSBatchEntity.setLast_modified_time(modifyBatch.getLast_modified_time());
+					
+					
+					programEntity updatedProgEntity_Batch = progRepo.getById(modifyBatch.getBatch_program_id());
+					
+					updateLMSBatchEntity.setProgramEntity_batch(updatedProgEntity_Batch);
+					
+					
+					 savedBatchDTO = batchMap.toBatchDTO(batchRepo.save(updateLMSBatchEntity));
 					 
 					 
 				}
@@ -119,30 +132,33 @@ public class batchServiceImpl implements batchService {
 			//creating a delete that deletes a specified batch by batchId
 			public Boolean deleteByBatchId(Integer batchId)
 			{
-				
-				Boolean isTrue=batchRepo.findById(batchId).isEmpty();
-				if(isTrue)
-					//new ResourceNotFoundException(("This BatchId-" + batchId + " is not found in the Database"));
-				//else 
+				System.out.println("in delete by batchId");
+				//Boolean value=batchRepo.findById(batchId).isEmpty();
+				Boolean value= batchRepo.existsById(batchId);
+				if(value)
+					
 				 batchRepo.deleteById(batchId);
+				else
+					System.out.println("batch id"+ batchId+"not found");
 				
-				
-				return isTrue;
+				return value;
 		
 			}
 			
 			public Boolean deleteBybatchName(String batchName) {
 				
 				batchEntity deletingEntity= batchRepo.findByBatchName(batchName);
-				//Boolean isTrue= 
-				if(deletingEntity!=null)
+				Boolean value =false; 
+				if(deletingEntity!=null) {
 				batchRepo.delete(deletingEntity);
+				value= true;
+				}
 				//new ResourceNotFoundException(("This BatchId-" + batchId + " is not found in the Database"));
-				//else 
-				 
+				else 
+				System.out.println("not found batch with batch name: "+batchName); 
 				
 				
-				return true;
+				return value;
 			}
 					
 }
