@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.demo.assignment.exception.DuplicateResourceFound;
+import com.demo.assignment.exception.ResourceNotFoundException;
 import com.demo.assignment.model.batchDTO;
 import com.demo.assignment.repo.batchRepository;
 import com.demo.assignment.service.batchService;
@@ -33,44 +35,35 @@ public class batchController {
 	batchService batchService;
 	
 	@GetMapping(value="/getBatches",produces="application/json")
-	public ResponseEntity<?> getAllBatches()
+	public ResponseEntity<?> getAllBatches()throws ResourceNotFoundException
 	{
 		System.out.println("in get all batches method");
-		//List<batchEntity> listOfBatches = batchRepo.findAll();
 		List<batchDTO> listOfBatches = batchService.getAllBatches();
 		return ResponseEntity.ok(listOfBatches);
 		
 	}
 	
 	@GetMapping ( path = "/batches/{batchId}", produces = "application/json")
-	public ResponseEntity<?> getBatchById(@PathVariable(value="batchId") @Positive Integer batchId)//throws ResourceNotFoundException {
+	public ResponseEntity<?> getBatchById(@PathVariable(value="batchId") @Positive Integer batchId)throws ResourceNotFoundException
 		{
 		System.out.println("in get batches by Id method");
-		//batchEntity batchEntity= batchRepo.getById(batchId);
 		batchDTO batchDTO= batchService.getBatchById(batchId);
-		
 		return ResponseEntity.ok(batchDTO);
-		
-		
 		}
 	
 	//get list of batches given programId
 	@GetMapping ( path = "/batchesByProgramId/{batch-programId}", produces = "application/json")
-	public ResponseEntity<?> getAllBatchesByBatchProgramId(@PathVariable(value="batch-programId") @Positive Integer batch_program_id)//throws ResourceNotFoundException {
+	public ResponseEntity<?> getAllBatchesByBatchProgramId(@PathVariable(value="batch-programId") @Positive Integer batch_program_id)throws ResourceNotFoundException
 		{
 		System.out.println("in getAll batches by Id method");
 		//get list of batch entites with given batch-program-Id from req object
 		List<batchDTO> batchDTOList= batchService.getBatchEntitesByProgramId(batch_program_id);
-		
-		
 		return ResponseEntity.ok(batchDTOList);
-		
-		
 		}
 	
 	
 	@PostMapping ( path = "/batches", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<?> createBatch(@Valid @RequestBody batchDTO saveBatchDTO )// throws DuplicateBatchException {
+	public ResponseEntity<?> createBatch(@Valid @RequestBody batchDTO saveBatchDTO )throws  DuplicateResourceFound
 	{	
 	System.out.println("lmsBatchEntity : " + saveBatchDTO.toString());
 	System.out.println("in createBatch method");
@@ -81,7 +74,8 @@ public class batchController {
 	
 	
 	@PutMapping ( path = "/putbatch/{batchId}", consumes = "application/json", produces = "application/json" )
-	public ResponseEntity<?> updateBatch(@PathVariable(value="batchId") @Positive Integer batchId, @Valid @RequestBody batchDTO batchDTODetail) throws Exception {
+	public ResponseEntity<?> updateBatch(@PathVariable(value="batchId") @Positive Integer batchId, @Valid @RequestBody batchDTO batchDTODetail) throws ResourceNotFoundException
+	{
 		System.out.println("in update Batch controller");
 		return ResponseEntity.ok(batchService.updateBatchById(batchId,batchDTODetail));
 		
@@ -89,25 +83,16 @@ public class batchController {
 
 	
 	@DeleteMapping ( path = "/deletebatchbyid/{batchId}", produces = "application/json" )
-	public ResponseEntity<?> deleteBatchById(@PathVariable(value="batchId") @Positive Integer batchId) //throws ResourceNotFoundException {
+	public ResponseEntity<?> deleteBatchById(@PathVariable(value="batchId") @Positive Integer batchId) throws ResourceNotFoundException
 	{
 		  Boolean deleted = batchService.deleteByBatchId(batchId); 
 		 
-		try {
-		
 		if(deleted)
 			
 			return ResponseEntity.status(HttpStatus.OK).build();
 		else
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		//}catch(Exception e) {
-			//return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-			//System.out.println("Exception : " + e.getMessage());
-		//}
-		finally{
-			System.out.println("in finallay of deleteById");
-		}
+			
 		}
 	
 	// batchName is not unique in batchTable. there are repeating batchnames.

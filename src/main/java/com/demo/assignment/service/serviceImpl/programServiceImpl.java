@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.demo.assignment.entity.programEntity;
+import com.demo.assignment.exception.DuplicateResourceFound;
+import com.demo.assignment.exception.ResourceNotFoundException;
 import com.demo.assignment.model.programDTO;
 
 import com.demo.assignment.repo.programRepository;
@@ -18,57 +20,75 @@ public class programServiceImpl implements programService{
 
 	@Autowired
 	   programRepository progRepo;	
-		@Autowired
+	@Autowired
 		programMapper progMap;
 	
-	public List<programDTO> getAllPrograms()  
-	{
+	
+	public List<programDTO> getAllPrograms()  throws ResourceNotFoundException
+	{ 
 		List<programEntity> programEntityList= progRepo.findAll();
-	    List<programDTO> programDTOList = progMap.toProgramDTOList(programEntityList);
-		return (programDTOList);
-		//return programEntityList;
-		
+		if(programEntityList.size()<=0) {
+			throw new ResourceNotFoundException("programs list is not found");
+		}
+		else {
+	    
+	    return (progMap.toProgramDTOList(programEntityList));
+	  }
 	}
 
-	public programDTO getProgramsById(Integer programId) {
-		// TODO Auto-generated method stub
+	public programDTO getProgramsById(Integer programId) throws ResourceNotFoundException
+	{
+		if(programId!= null) {
 		
-		programEntity programEntity = progRepo.findById(programId).get();
+		if(progRepo.existsById(programId))
+		{
+			programEntity programEntity = progRepo.findById(programId).get();
+			return (progMap.toProgramDTO(programEntity));
 		
-		return (progMap.toProgramDTO(programEntity));
+		}
+		else {
+			throw new ResourceNotFoundException("program with this: "+programId +"not found");
+		 }
+		}else
+		{
+			throw new IllegalArgumentException();
+		}
+		//programEntity programEntity  = progRepo.findById(programId)
+	    //        .orElseThrow(() -> new ResourceNotFoundException("programId not found for this id :: " + programId));
+		
+	
 	}
 	
 	
 	//post
-			public programDTO createAndSaveProgram(programDTO program)// throws  ResourceAlreadyExistsExceptions;
+			public programDTO createAndSaveProgram(programDTO program)throws  DuplicateResourceFound
 			{
 				programEntity newProgramEntity = progMap.toProgramEntity(program);
 				 programDTO savedProgramDTO =null;
-				 //try {
+				 
 				 List<programEntity>result= progRepo.findByProgramName(newProgramEntity.getProgram_name());
-				 if(!(result.size()>0))
+				 if(result.size()>0) {
+					 throw new DuplicateResourceFound("cannot create program , since already exists");
+				 }else {
 					 savedProgramDTO= progMap.INSTANCE.toProgramDTO(progRepo.save(newProgramEntity));
-				 
-				 
-					return (savedProgramDTO); 
-				//}catch(Exception e) {
-					//throw new ProgramAlreadyExistsException ( " Program Name:" + newProgramEntity.getProgram_name() + " program already exists; Please give a different new program"); 
-				//}
-					
+				 		return (savedProgramDTO);
+				 }
+					  
 			}
 	      
 			//update based on programId
-			public programDTO updateProgramById(Integer programId,programDTO program)// throws ResourceAlreadyExistsExceptions;
+			public programDTO updateProgramById(Integer programId,programDTO program)throws ResourceNotFoundException
 			{
 				programEntity updateLMSProgramEntity =null;
 				
 				programDTO savedProgramDTO =null;
 				
-				//try {
+				if(programId!= null) {
 				Boolean isTrue=progRepo.findById(programId).isEmpty();
-				 if(isTrue)
-				 //throw new ProgramNotFoundException("program with id"+programId +"not found");
+				 if(isTrue) {
 					 System.out.println("program with "+ programId+"not found");
+				 throw new ResourceNotFoundException("program with id"+programId +"not found");
+					}
 				else {
 			    
 					updateLMSProgramEntity= progRepo.findById(programId).get();
@@ -80,16 +100,26 @@ public class programServiceImpl implements programService{
 					
 					
 					 savedProgramDTO =progMap.INSTANCE.toProgramDTO(progRepo.save(updateLMSProgramEntity));
+					 return savedProgramDTO;
 				}
-			return savedProgramDTO;
+			}else
+			{
+				throw new IllegalArgumentException();
 			}
+		}
 			
 			//update based on programName
-			public programDTO updateProgramByName(String programName,programDTO program)// throws ResourceAlreadyExistsExceptions;
+			public programDTO updateProgramByName(String programName,programDTO program)throws ResourceNotFoundException
 			{
 				programEntity updateProgramEntity =null;
+				if(!(programName.isEmpty())) {
+					
 				
 				List<programEntity>result= progRepo.findByProgramName(programName);
+				if(result.size()<=0) {
+					System.out.println("in update program, no program name list is found");
+					throw new ResourceNotFoundException("no list with such program name"+programName);
+				}else {
 				 for(programEntity rec:result) {
 					 
 					if( rec.getProgram_name().equalsIgnoreCase(programName)) {
@@ -108,54 +138,69 @@ public class programServiceImpl implements programService{
 						progRepo.save(updateProgramEntity);
 					
 			 		return progMap.INSTANCE.toProgramDTO(updateProgramEntity);
+				}
 				
-			}
+			 }//end of else
+				else
+				{
+					throw new IllegalArgumentException();
+				}
+			}//end of method
 			
 			
 			//delete by programId
-			public boolean deleteByProgramId(Integer programId)// throws ResourceNotFoundException;
+			public boolean deleteByProgramId(Integer programId)throws ResourceNotFoundException
 			{
 				 System.out.println("in delete program by id method");
-				 programEntity progEntity= progRepo.findById(programId).get();
-				 				 
-				 Boolean value= progRepo.existsById(programId);
-				 if(value) 
-					 progRepo.delete(progEntity);
-				else 
-				 System.out.println("program with this id"+programId+ "is not found");
-					//throw new ProgramNotFoundException();
-				
-				 return value;
-			}
+				 if(programId!=null)
+				 {
+					 Boolean value= progRepo.existsById(programId);
+					 if(value) {
+						 programEntity progEntity= progRepo.findById(programId).get();
+						 progRepo.delete(progEntity);
+						 return value;
+					 }else {
+						 System.out.println("no record found with programId"+programId);
+						 throw new ResourceNotFoundException("no record found with programId");
+					 }
+					 
+				 }
+				 else
+					 {throw new IllegalArgumentException();}
+				}	
+			
 			
 			//delete by programName
-			public boolean deleteByProgramName(String programName)// throws ResourceNotFoundException;
-			{
+			public boolean deleteByProgramName(String programName)throws ResourceNotFoundException
+			{ 
 				boolean deleted = false;
-				System.out.println("in deleteByprogramName impl");
-				List<programEntity> result= progRepo.findByProgramName(programName);
 				programEntity deletedLMSProgramEntity =null;
+				System.out.println("in deleteByprogramName impl");
+				if(!(programName.isBlank())) {
+					
+				List<programEntity> result= progRepo.findByProgramName(programName);
 				
+					if(result.size()<=0) {
+					System.out.println("no record found with progarmName:"+programName);
+					throw new ResourceNotFoundException("no record found with programName");
+				}else {
 				 for(programEntity eachRec:result) {
 					 
 					if( eachRec.getProgram_name().equalsIgnoreCase(programName)) {
 					
 						deletedLMSProgramEntity =eachRec;
 					}
-					 
-				 }
-				
-				
-				if(result.size()>0)	{
-					progRepo.delete(deletedLMSProgramEntity);
+			     }
+				progRepo.delete(deletedLMSProgramEntity);
 				deleted =true;
-				}
-				else 	
-				//throw new ProgramNotFoundException();
-					System.out.println("program with this id"+programName+ "is not found");
-				
 				return deleted;
-			
-}
+				}
+					
+			}	else
+			{
+				throw new IllegalArgumentException();
+			}
+				
+			}
 }
 

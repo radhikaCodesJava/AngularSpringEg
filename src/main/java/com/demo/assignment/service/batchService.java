@@ -6,22 +6,24 @@ import javax.validation.constraints.Positive;
 
 import org.springframework.stereotype.Service;
 
+import com.demo.assignment.exception.DuplicateResourceFound;
+import com.demo.assignment.exception.ResourceNotFoundException;
 import com.demo.assignment.model.batchDTO;
 
 @Service
 public interface batchService {
-	public List<batchDTO> getAllBatches();
+	public List<batchDTO> getAllBatches()throws ResourceNotFoundException;
 	
-	public batchDTO getBatchById(@Positive Integer batchId);
+	public batchDTO getBatchById(@Positive Integer batchId)throws ResourceNotFoundException;
 	
-	public List<batchDTO> getBatchEntitesByProgramId(Integer batch_program_id);
+	public List<batchDTO> getBatchEntitesByProgramId(Integer batch_program_id)throws ResourceNotFoundException;
 	
-	public batchDTO createNewBatch(batchDTO batchDTO); //throws DuplicateBatchException;
+	public batchDTO createNewBatch(batchDTO batchDTO) throws  DuplicateResourceFound;
 	
-	public batchDTO updateBatchById(Integer batchId,batchDTO batch);
+	public batchDTO updateBatchById(Integer batchId,batchDTO batch)throws ResourceNotFoundException;
 	
-	public Boolean deleteByBatchId(Integer batchId);
+	public Boolean deleteByBatchId(Integer batchId)throws ResourceNotFoundException;
 	
-	public Boolean deleteBybatchName(String batchName);
+	public Boolean deleteBybatchName(String batchName)throws ResourceNotFoundException;
 
 }

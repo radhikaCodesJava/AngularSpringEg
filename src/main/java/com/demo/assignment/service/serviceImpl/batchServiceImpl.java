@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.demo.assignment.entity.batchEntity;
 import com.demo.assignment.entity.programEntity;
+import com.demo.assignment.exception.DuplicateResourceFound;
+import com.demo.assignment.exception.ResourceNotFoundException;
 import com.demo.assignment.model.batchDTO;
 import com.demo.assignment.repo.batchRepository;
 import com.demo.assignment.repo.programRepository;
@@ -26,37 +28,64 @@ public class batchServiceImpl implements batchService {
 		@Autowired
 		batchMapper batchMap;
 	
-	public List<batchDTO> getAllBatches()  
+	public List<batchDTO> getAllBatches()  throws ResourceNotFoundException
 	{
 		List<batchEntity> batchEntityList= batchRepo.findAll();
-		
+		if(batchEntityList.size()<=0) {
+			throw new ResourceNotFoundException("batch list is not found");
+		}
 		return (batchMap.toBatchDTOList(batchEntityList));
 		
 		
 	}
 	
-	public batchDTO getBatchById(Integer batchId) {
+	public batchDTO getBatchById(Integer batchId) throws ResourceNotFoundException,IllegalArgumentException
+	{
+		if(batchId!=null)
+		{
+			if(batchRepo.existsById(batchId)) 
+			{
+				batchEntity batchEntityById =batchRepo.findById(batchId).get();
+				
+				return (batchMap.toBatchDTO(batchEntityById));
+				
+			}else
+			{
+				throw new ResourceNotFoundException("batch with this: "+batchId +"not found");
+			}
+		}else
+		{
+			throw new IllegalArgumentException();
+		}
 		
-		batchEntity batchEntityById =batchRepo.findById(batchId).get();
-		//return batchEntityById;
-		return (batchMap.toBatchDTO(batchEntityById));
+		
 	}
 	
 	
 	//getall batches by batch_program_id
-	public List<batchDTO> getBatchEntitesByProgramId(Integer batch_program_id)
-		
+	public List<batchDTO> getBatchEntitesByProgramId(Integer batch_program_id)throws ResourceNotFoundException
 	{
-		List<batchEntity> batchEntityList= batchRepo.findAllByBatch_ProgramId( batch_program_id );
-		
-		return (batchMap.toBatchDTOList(batchEntityList));
-		
-		
+		if(batch_program_id!=null) {
+			
+				List<batchEntity> batchEntityList= batchRepo.findAllByBatch_ProgramId( batch_program_id );
+				if(batchEntityList.size()<=0)
+				{
+					System.out.println("no records found with batch_program_id "+batch_program_id);
+					throw new ResourceNotFoundException("batch with this: "+batch_program_id +"not found");
+				
+			}else
+			{
+				return (batchMap.toBatchDTOList(batchEntityList));
+			}
+			
+		}else {
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	
 	//creating post  that saves the Batch detail in the database  
-			public batchDTO createNewBatch(batchDTO batchDTO)// throws DuplicateBatchException { 			
+			public batchDTO createNewBatch(batchDTO batchDTO)throws  DuplicateResourceFound
 			{	
 				System.out.println("in start of post method in batchservice Impl");
 			batchDTO savedBatchDTO=null;
@@ -64,10 +93,14 @@ public class batchServiceImpl implements batchService {
 			programEntity progEntity; 
 			Integer program_batchId= batchDTO.getBatch_program_id();
 				batchEntity newBatchEntity= batchMap.toBatchEntity(batchDTO);
-				try {
+				
 									
 				List<batchEntity> result = batchRepo.findByBatch_nameAndBatch_program_id(newBatchEntity.getBatch_name(), (newBatchEntity.getProgramEntity_batch()).getProgramId());
-				if(!(result.size()>0)) {
+				if(result.size()>0) {
+					System.out.println("the same combination with batch name and programId exists");
+					throw new DuplicateResourceFound("cannot create program , since already exists");
+				}else {
+					
 					//save the new batch details in repository since this combination is new
 					//set the program entiy details to batch (as one entity has other entity) 
 					progEntity = progRepo.findById(program_batchId).get();
@@ -76,89 +109,101 @@ public class batchServiceImpl implements batchService {
 				System.out.println("newBatchEntity : " + newBatchEntity.toString());
 							newCreatedBatch= batchRepo.save(newBatchEntity);
 				savedBatchDTO =batchMap.toBatchDTO(newCreatedBatch);
-				}
-				else {
-					System.out.println("the same combination with batch name and programId exists");
-				}
-				
 				return savedBatchDTO;
 				}
-				/*}catch(Exception e)
-				{
-					throw new DuplicateBatchException ( " Batch Name:" + newBatchEntity.getBatch_name() + "-ProgramId:" + (newBatchEntity.getLmsprogram()).getProgram_id() 
-			                + " combination already exists; Please give a different combination"); 
-				}*/
-				finally{
-					System.out.println("in post method of batch serviceImpl");
-				}
 			}
+				
+			
 			
 			//creating put  that updates the program detail by programId
-			public batchDTO updateBatchById(Integer batchId,batchDTO modifyBatch) //throws DuplicateBatchException{
+			public batchDTO updateBatchById(Integer batchId,batchDTO modifyDTOBatch) throws ResourceNotFoundException
 			{
 				System.out.println("in updateBatchId method of batchServiceImpl");
 				batchEntity updateLMSBatchEntity;
 				batchDTO savedBatchDTO = null;
-				try {
-					batchEntity batchEntity = batchMap.toBatchEntity(modifyBatch);
+				if(batchId!=null)
+				{
+					batchEntity batchEntity = batchMap.toBatchEntity(modifyDTOBatch);
 				Boolean isPresentTrue=batchRepo.findById(batchId).isPresent();
 				
 				if(isPresentTrue)
 				{
 					updateLMSBatchEntity = batchRepo.getById(batchId);
-					updateLMSBatchEntity.setBatch_name(modifyBatch.getBatch_name());
-					updateLMSBatchEntity.setBatch_description(modifyBatch.getBatch_description());
-					updateLMSBatchEntity.setBatch_num_classes(modifyBatch.getBatch_num_classes());
-					updateLMSBatchEntity.setBatch_status(modifyBatch.getBatch_status());
-					updateLMSBatchEntity.setCreation_time(modifyBatch.getCreation_time());
-					updateLMSBatchEntity.setLast_modified_time(modifyBatch.getLast_modified_time());
+					updateLMSBatchEntity.setBatch_name(modifyDTOBatch.getBatch_name());
+					updateLMSBatchEntity.setBatch_description(modifyDTOBatch.getBatch_description());
+					updateLMSBatchEntity.setBatch_num_classes(modifyDTOBatch.getBatch_num_classes());
+					updateLMSBatchEntity.setBatch_status(modifyDTOBatch.getBatch_status());
+					updateLMSBatchEntity.setCreation_time(modifyDTOBatch.getCreation_time());
+					updateLMSBatchEntity.setLast_modified_time(modifyDTOBatch.getLast_modified_time());
 					
 					
-					programEntity updatedProgEntity_Batch = progRepo.getById(modifyBatch.getBatch_program_id());
+					programEntity updatedProgEntity_Batch = progRepo.getById(modifyDTOBatch.getBatch_program_id());
 					
 					updateLMSBatchEntity.setProgramEntity_batch(updatedProgEntity_Batch);
 					
 					
 					 savedBatchDTO = batchMap.toBatchDTO(batchRepo.save(updateLMSBatchEntity));
 					 
-					 
+					 return savedBatchDTO; 
 				}
-				}catch(Exception e){
-					System.out.println("Exception : " + e.getMessage());
+				else {
+					throw new ResourceNotFoundException("no record found with "+batchId);
 				}
-				return savedBatchDTO; 
+				
+			}else {
+				throw new IllegalArgumentException();
 			}
+		}
 			
 			//creating a delete that deletes a specified batch by batchId
-			public Boolean deleteByBatchId(Integer batchId)
+			public Boolean deleteByBatchId(Integer batchId) throws ResourceNotFoundException
 			{
 				System.out.println("in delete by batchId");
-				//Boolean value=batchRepo.findById(batchId).isEmpty();
-				Boolean value= batchRepo.existsById(batchId);
-				if(value)
-					
-				 batchRepo.deleteById(batchId);
+				if(batchId!=null) {
+					Boolean value= batchRepo.existsById(batchId);
+					if(value)
+					{
+						batchRepo.deleteById(batchId);
+						return value;
+					}
+					else
+					{
+						System.out.println("record not found with batchId: "+batchId);
+						throw new ResourceNotFoundException("record not found with batchid");
+					}
+					 
+				}				
 				else
-					System.out.println("batch id"+ batchId+"not found");
+				{
+					throw new IllegalArgumentException();
+				}
 				
-				return value;
-		
 			}
 			
-			public Boolean deleteBybatchName(String batchName) {
-				
+			//delete by batchName
+			public Boolean deleteBybatchName(String batchName) throws ResourceNotFoundException
+			{
+				Boolean value =false;
+				if(!(batchName.isBlank()))
+				{
+					
 				batchEntity deletingEntity= batchRepo.findByBatchName(batchName);
-				Boolean value =false; 
+				 
 				if(deletingEntity!=null) {
 				batchRepo.delete(deletingEntity);
 				value= true;
-				}
-				//new ResourceNotFoundException(("This BatchId-" + batchId + " is not found in the Database"));
-				else 
-				System.out.println("not found batch with batch name: "+batchName); 
-				
-				
 				return value;
+				}
+				else 
+				{
+					System.out.println("not found batch with batch name: "+batchName); 
+				
+					throw new ResourceNotFoundException(("This BatchName is not found in the Database"));
+				}
+		
+			}else
+			{
+				throw new IllegalArgumentException();
 			}
-					
+		}			
 }
