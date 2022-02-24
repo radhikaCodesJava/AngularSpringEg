@@ -25,11 +25,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @NoArgsConstructor
-
+@ToString
+@AllArgsConstructor
 
 @Entity
 @Table(name="tbl_lms_program")
@@ -41,16 +43,16 @@ public class programEntity implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	
-	/*public programEntity(@NonNull Integer program_id, @NonNull String program_name, @NonNull String program_description,
-			@NonNull String program_status, @NonNull Timestamp creation_time, @NonNull Timestamp last_mod_time) {
+	public programEntity(Integer program_id, String program_name, String program_description,
+			String program_status, Timestamp creation_time,  Timestamp last_mod_time) {
 		super();
-		this.program_id = program_id;
+		this.programId = program_id;
 		this.program_name = program_name;
 		this.program_description = program_description;
 		this.program_status = program_status;
 		this.creation_time = creation_time;
 		this.last_mod_time = last_mod_time;
-	}*/
+	}
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "program_id_seq")
