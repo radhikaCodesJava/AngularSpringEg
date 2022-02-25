@@ -1,6 +1,7 @@
 package com.demo.assignment.service.serviceImpl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,28 +89,43 @@ public class batchServiceImpl implements batchService {
 			public batchDTO createNewBatch(batchDTO batchDTO)throws  DuplicateResourceFound
 			{	
 				System.out.println("in start of post method in batchservice Impl");
-			batchDTO savedBatchDTO=null;
-			batchEntity newCreatedBatch;
-			programEntity progEntity; 
-			Integer program_batchId= batchDTO.getBatch_program_id();
-				batchEntity newBatchEntity= batchMap.toBatchEntity(batchDTO);
+				batchDTO savedBatchDTO=null;
+				batchEntity newCreatedBatch;
+				programEntity progEntity; 
+				Integer program_batchId= batchDTO.getBatch_program_id();
 				
-									
+				if(batchDTO != null && program_batchId!=null && batchDTO.getBatch_name()!=null) {
+			
+				batchEntity newBatchEntity= batchMap.toBatchEntity(batchDTO);
+				//progEntity = progRepo.findById(program_batchId).get();
+				
+				if(progRepo.existsById(program_batchId))
+				{
+				progEntity = progRepo.findById(program_batchId).get();
+					
 				List<batchEntity> result = batchRepo.findByBatch_nameAndBatch_program_id(newBatchEntity.getBatch_name(), (newBatchEntity.getProgramEntity_batch()).getProgramId());
 				if(result.size()>0) {
 					System.out.println("the same combination with batch name and programId exists");
-					throw new DuplicateResourceFound("cannot create program , since already exists");
+					throw new DuplicateResourceFound("cannot create batch , since already exists with same combination");
 				}else {
 					
 					//save the new batch details in repository since this combination is new
 					//set the program entiy details to batch (as one entity has other entity) 
-					progEntity = progRepo.findById(program_batchId).get();
-				
+					
 					newBatchEntity.setProgramEntity_batch(progEntity);
-				System.out.println("newBatchEntity : " + newBatchEntity.toString());
+				
 							newCreatedBatch= batchRepo.save(newBatchEntity);
 				savedBatchDTO =batchMap.toBatchDTO(newCreatedBatch);
 				return savedBatchDTO;
+				}
+				}else {
+					System.out.println("no programid in program table "+program_batchId);
+					throw new NoSuchElementException("no programid in program table ");
+				  }
+				}//end of if
+				else {
+					System.out.println("check either dto, batchName, batchProgramId is null ");
+					throw new NullPointerException();
 				}
 			}
 				
@@ -187,10 +203,12 @@ public class batchServiceImpl implements batchService {
 				if(!(batchName.isBlank()))
 				{
 					
-				batchEntity deletingEntity= batchRepo.findByBatchName(batchName);
+				List<batchEntity> deletingEntitesList= batchRepo.findByBatchName(batchName);
 				 
-				if(deletingEntity!=null) {
-				batchRepo.delete(deletingEntity);
+				if(deletingEntitesList!=null && deletingEntitesList.size()>0) {
+				for(batchEntity rec:deletingEntitesList) {
+					batchRepo.delete(rec);
+				}
 				value= true;
 				return value;
 				}

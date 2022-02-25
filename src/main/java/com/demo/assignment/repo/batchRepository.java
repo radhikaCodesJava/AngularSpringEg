@@ -15,7 +15,7 @@ public interface batchRepository extends JpaRepository<batchEntity, Integer> {
 	List<batchEntity> findByBatch_nameAndBatch_program_id ( String batch_name, Integer batch_program_id);
 	
 	@Query(value = "SELECT * FROM tbl_lms_batch WHERE batch_Name = ?", nativeQuery = true)
-	batchEntity findByBatchName ( String batchName);
+	List<batchEntity> findByBatchName ( String batchName);
 	
 	@Query(value = "SELECT * FROM tbl_lms_batch WHERE batch_program_id = ?", nativeQuery = true)
 	List<batchEntity> findAllByBatch_ProgramId( Integer batch_program_id );

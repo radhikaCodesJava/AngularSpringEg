@@ -4,7 +4,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -32,33 +34,37 @@ public class ProgramRepoTests {
 	@Autowired
 	private programRepository progRepo;
 	
+	private programEntity newProg;
+	
+	@BeforeEach
+    public void setup(){
+		LocalDateTime now= LocalDateTime.now();
+		Timestamp timestamp= Timestamp.valueOf(now);
+		newProg= new programEntity(7,"Django",null, "nonActive",timestamp, timestamp, null);
+	   }
+	
+	/*@AfterEach
+	public void tearDown() {
+		
+	}*/
+	
+	
+	
 	@DisplayName("junit test for createProgram operation")
 	@Test
 	@Order(1)
-	@Rollback(value=false)
+	//@Rollback(value=false)
 		public void testCreateProgram()
 	{
 		//Given -setup
-		LocalDateTime now = LocalDateTime.now();
-		Timestamp timestamp = Timestamp.valueOf(now);
-		
-		//List<batchEntity> listOfBatchIds
-		/*List<batchEntity> batchesList = Arrays.asList(
-                new batchEntity(23,"02","data-science","Active",5,null,null,4),
-                new batchEntity(24,"06","springBoot","Active",10,null,null,6),
-                new batchEntity(25,"07","Angular","NON-Active",4,null,null,7)
-        );*/
-		
 		//when-action or behaviour that we are going to test
-		programEntity newprog= new programEntity(1,"Ruby",null,"nonActive", timestamp,timestamp,null);
-		
-		programEntity saveEntity=progRepo.save(newprog);
+		programEntity saveEntity=progRepo.save(newProg);
 		
 		//then- verify the output
 		assertNotNull(saveEntity);
-		assertThat(newprog).isNotNull();
+		assertThat(newProg).isNotNull();
 		
-	assertThat(saveEntity.getProgramId()).isEqualTo(newprog.getProgramId());
+	assertThat(saveEntity.getProgramId()).isEqualTo(newProg.getProgramId());
 	
 	}
 	
@@ -66,20 +72,11 @@ public class ProgramRepoTests {
 	@DisplayName("junit test for getAllProgramList operation")
 	@Test
 	@Order(2)
-	@Rollback(value=false)
-		public void testGetAllPrograms()
+	public void testGetAllPrograms()
 	{
 		//Given -setup
-		/*LocalDateTime now = LocalDateTime.now();
-		Timestamp timestamp = Timestamp.valueOf(now);
-		
-			
-		programEntity newprog= new programEntity(1,"aws",null,"nonActive", timestamp,timestamp,null);
-		programEntity newprog1= new programEntity(5,"Dart&Flutter",null,"active",timestamp, timestamp, null);
-		
-		progRepo.save(newprog);
-		progRepo.save(newprog1);*/
-		
+		programEntity initialSavedEntity=progRepo.save(newProg);
+				
 		//when-action or behaviour that we are going to test
 		List<programEntity> listOfProgEntites=progRepo.findAll();
 		
@@ -92,16 +89,13 @@ public class ProgramRepoTests {
 	@DisplayName("junit test for get program by id")
 	@Test
 	@Order(3)
-	@Rollback(value=false)
 	public void testGetProgramById()
 	{
 		//Given-setup
-		LocalDateTime now= LocalDateTime.now();
-		Timestamp timestamp= Timestamp.valueOf(now);
-		programEntity newProg= new programEntity(7,"Django",null, "nonActive",timestamp, timestamp, null);
-		progRepo.save(newProg);
+		programEntity intialSavedEntity=progRepo.save(newProg);
+		
 		//when-action or behaviour 
-		programEntity progEntity= progRepo.getById(newProg.getProgramId());
+		programEntity progEntity= progRepo.getById(intialSavedEntity.getProgramId());
 		
 		//then-verify
 		assertNotNull(progEntity);
@@ -110,36 +104,115 @@ public class ProgramRepoTests {
 	
 	//junit test for get program by programName from repo
 	@DisplayName("junit test for get program(unique) by prograName")
-	public void testFindProgramByName() {
-	//Given-setup
-		LocalDateTime now=LocalDateTime.now();
-		Timestamp timestamp = Timestamp.valueOf(now);
-		programEntity newProg= new programEntity(18,"Docker",null, "nonActive",timestamp, timestamp, null);
-		progRepo.save(newProg);
+	@Test
+	@Order(4)
+	public void testFindProgramByName() 
+	{
+	 //Given-setup
+		programEntity initialSavedEntity=progRepo.save(newProg);
+		
 		//when-action or bhehaviour
-		List<programEntity> progEntityList=progRepo.findByProgramName(newProg.getProgram_name());
+		List<programEntity> progEntityList=progRepo.findByProgramName(initialSavedEntity.getProgram_name());
+		programEntity foundprogEntity =null;
+		for(programEntity rec:progEntityList) {
+			 if( rec.getProgram_name().equalsIgnoreCase(newProg.getProgram_name())) {
+			   foundprogEntity =rec;
+			}
+		  }
 		
 		//then-verify
-		assertNotNull(progEntityList);
-		assertThat(progEntityList.size()).isGreaterThan(0);
-		
-		//assertThat(progEntity.getProgram_name()).isEqualTo(newProg.getProgram_name());
+				assertNotNull(progEntityList);
+				assertThat(progEntityList.size()).isGreaterThan(0);
+				assertNotNull(foundprogEntity);
+		assertThat(foundprogEntity.getProgram_name()).isEqualTo(newProg.getProgram_name());
 	}
+	
 	//junit test for update program by programid in repo
+	@DisplayName("junit test for updating a rec in repo with progId")
+	@Test
+	@Order(5)
+	//@Rollback(value=false)
 	public void testUpdateByProgramId() {
+		//Given-setup
+		programEntity intialSavedEntity=progRepo.save(newProg);
 		
+		//when-action or behaviour
+		programEntity progEntity= progRepo.getById(intialSavedEntity.getProgramId());
+		progEntity.setProgram_description("old course");
+		progEntity.setProgram_status("active");
+		programEntity modifiedSavedEntity=progRepo.save(progEntity);
+		
+		//then-verify
+		assertNotNull(modifiedSavedEntity);
+		assertThat(modifiedSavedEntity.getProgram_description()).isEqualTo(progEntity.getProgram_description());
+		assertThat(modifiedSavedEntity.getProgram_status()).isEqualTo(progEntity.getProgram_status());
 	}
 	
 	//junit test for update program by programName in repo
+	@Test
+	@Order(6)
+	//@Rollback(value=false)
 	public void testUpdateByProgramName() {
+		//Given-setup
+		programEntity initialSavedProgramEntity =progRepo.save(newProg);
 		
+		//when-action or behaviour
+		List<programEntity> progEntityList=progRepo.findByProgramName(initialSavedProgramEntity.getProgram_name());
+		programEntity foundprogEntity =null;
+		for(programEntity rec:progEntityList) {
+			 if( rec.getProgram_name().equalsIgnoreCase(newProg.getProgram_name())) {
+			   foundprogEntity =rec;
+			}
+		  }
+		foundprogEntity.setProgram_description("old course");
+		foundprogEntity.setProgram_status("active");
+		programEntity modifiedSavedEntity= progRepo.save(foundprogEntity);
+		
+		//then-verify
+		assertNotNull(progEntityList);
+		assertNotNull(foundprogEntity);
+		assertNotNull(modifiedSavedEntity);
+		assertThat(modifiedSavedEntity.getProgram_description()).isEqualTo(foundprogEntity.getProgram_description());
+		assertThat(modifiedSavedEntity.getProgram_status()).isEqualTo(foundprogEntity.getProgram_status());
 	}
+	
 	//junit test for delete program by program Id from repo
+	@Test
+	@Order(7)
+	///@Rollback(value=false)
 	public void testDeleteByProgramId() {
+		//Given-setup
+	  programEntity initialSavedProgramEntity =progRepo.save(newProg);
 		
+	  //when-action or behaviour
+	  programEntity progEntity = progRepo.getById(initialSavedProgramEntity.getProgramId());
+	  progRepo.deleteById(progEntity.getProgramId());
+	  Optional<programEntity> programOptional= progRepo.findById(progEntity.getProgramId());
+	  //then-verify
+	  assertThat(programOptional).isEmpty();
 	}
+	
 	//junit test for delete program by programName from repo
+	@Test
+	@Order(8)
+	//@Rollback(value=false)
 	public void testDeleteByProgramName() {
+		//Given-setup
+		programEntity initialSavedProgramEntity =progRepo.save(newProg);
+	  
+	  //when-action or behaviour
+	   List<programEntity> progEntityList=progRepo.findByProgramName(initialSavedProgramEntity.getProgram_name());
+		programEntity foundprogEntity =null;
+		for(programEntity rec:progEntityList) {
+			 if( rec.getProgram_name().equalsIgnoreCase(newProg.getProgram_name())) {
+			   foundprogEntity =rec;
+			}
+		  }
+		 progRepo.delete(foundprogEntity);
+		 Optional<programEntity> programOptional = progRepo.findById(foundprogEntity.getProgramId());
+		 
+		 //then-verify
+		 assertThat(programOptional).isEmpty();
 		
 	}
 }
