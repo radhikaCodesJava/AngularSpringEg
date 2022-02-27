@@ -31,7 +31,7 @@ import com.demo.assignment.entity.batchEntity;
 	@DataJpaTest
 	//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 	@AutoConfigureTestDatabase(replace=Replace.NONE)
-public class BatchRepoTests {
+public class BatchRepoUnitTests {
 	
 	@Autowired
 		private TestEntityManager entityManager;

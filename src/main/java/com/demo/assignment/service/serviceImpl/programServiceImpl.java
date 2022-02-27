@@ -37,8 +37,10 @@ public class programServiceImpl implements programService{
 	}
 
 	public programDTO getProgramsById(Integer programId) throws ResourceNotFoundException
+	
 	{
 		if(programId!= null) {
+			
 		
 		if(progRepo.existsById(programId))
 		{

@@ -1,5 +1,5 @@
 package com.demo.assignment.servicetests;
 
-public class BatchServiceTests {
+public class BatchServiceUnitTests {
 
 }

@@ -29,7 +29,7 @@ import com.demo.assignment.repo.programRepository;
 //@SpringBootTest
 @DataJpaTest
 @AutoConfigureTestDatabase(replace=Replace.NONE)
-public class ProgramRepoTests {
+public class ProgramRepoUnitTests {
 
 	@Autowired
 	private programRepository progRepo;
