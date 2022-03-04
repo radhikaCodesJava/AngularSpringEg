@@ -25,5 +25,7 @@ public interface batchService {
 	public Boolean deleteByBatchId(Integer batchId)throws ResourceNotFoundException;
 	
 	public Boolean deleteBybatchName(String batchName)throws ResourceNotFoundException;
+	
+	
 
 }

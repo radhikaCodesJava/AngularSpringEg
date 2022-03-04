@@ -67,12 +67,14 @@ public class programServiceImpl implements programService{
 			{
 				programEntity newProgramEntity = progMap.toProgramEntity(program);
 				 programDTO savedProgramDTO =null;
+				 programEntity savedEntity =null;
 				 
 				 List<programEntity>result= progRepo.findByProgramName(newProgramEntity.getProgram_name());
 				 if(result.size()>0) {
 					 throw new DuplicateResourceFound("cannot create program , since already exists");
 				 }else {
-					 savedProgramDTO= progMap.INSTANCE.toProgramDTO(progRepo.save(newProgramEntity));
+					 savedEntity = progRepo.save(newProgramEntity);
+					 savedProgramDTO= progMap.INSTANCE.toProgramDTO(savedEntity);
 				 		return (savedProgramDTO);
 				 }
 					  
@@ -82,12 +84,13 @@ public class programServiceImpl implements programService{
 			public programDTO updateProgramById(Integer programId,programDTO program)throws ResourceNotFoundException
 			{
 				programEntity updateLMSProgramEntity =null;
-				
+				programEntity savedProgramEntity =null;
 				programDTO savedProgramDTO =null;
 				
+				
 				if(programId!= null) {
-				Boolean isTrue=progRepo.findById(programId).isEmpty();
-				 if(isTrue) {
+				Boolean value=progRepo.existsById(programId);
+				 if(!(value)) {
 					 System.out.println("program with "+ programId+"not found");
 				 throw new ResourceNotFoundException("program with id"+programId +"not found");
 					}
@@ -100,8 +103,8 @@ public class programServiceImpl implements programService{
 					updateLMSProgramEntity.setCreation_time(program.getCreation_time());
 					updateLMSProgramEntity.setLast_mod_time(program.getLast_mod_time());
 					
-					
-					 savedProgramDTO =progMap.INSTANCE.toProgramDTO(progRepo.save(updateLMSProgramEntity));
+					savedProgramEntity = progRepo.save(updateLMSProgramEntity);
+					 savedProgramDTO =progMap.INSTANCE.toProgramDTO(savedProgramEntity);
 					 return savedProgramDTO;
 				}
 			}else
@@ -204,5 +207,7 @@ public class programServiceImpl implements programService{
 			}
 				
 			}
+			
+		
 }
 

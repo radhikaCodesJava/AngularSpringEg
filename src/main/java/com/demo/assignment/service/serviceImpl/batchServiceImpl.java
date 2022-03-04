@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.management.ReflectionException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +69,8 @@ public class batchServiceImpl implements batchService {
 	public List<batchDTO> getBatchEntitesByProgramId(Integer batch_program_id)throws ResourceNotFoundException
 	{
 		if(batch_program_id!=null) {
-			
+			if(batchRepo.existsById(batch_program_id))
+				{
 				List<batchEntity> batchEntityList= batchRepo.findAllByBatch_ProgramId( batch_program_id );
 				if(batchEntityList.size()<=0)
 				{
@@ -78,10 +81,15 @@ public class batchServiceImpl implements batchService {
 			{
 				return (batchMap.toBatchDTOList(batchEntityList));
 			}
-			
-		}else {
-			throw new IllegalArgumentException();
 		}
+			else
+			{
+				throw new ResourceNotFoundException("batch with this: "+batch_program_id +"not found");
+			}
+}else {
+	System.out.println("programId is null");
+	throw new IllegalArgumentException();
+}
 	}
 	
 	
@@ -137,6 +145,7 @@ public class batchServiceImpl implements batchService {
 				System.out.println("in updateBatchId method of batchServiceImpl");
 				batchEntity updateLMSBatchEntity;
 				batchDTO savedBatchDTO = null;
+				batchEntity savedBatchEntity =null;
 				if(batchId!=null)
 				{
 					batchEntity batchEntity = batchMap.toBatchEntity(modifyDTOBatch);
@@ -157,8 +166,8 @@ public class batchServiceImpl implements batchService {
 					
 					updateLMSBatchEntity.setProgramEntity_batch(updatedProgEntity_Batch);
 					
-					
-					 savedBatchDTO = batchMap.toBatchDTO(batchRepo.save(updateLMSBatchEntity));
+					savedBatchEntity = batchRepo.save(updateLMSBatchEntity);
+					 savedBatchDTO = batchMap.toBatchDTO(savedBatchEntity);
 					 
 					 return savedBatchDTO; 
 				}
