@@ -1,20 +1,22 @@
 package com.demo.assignment.config;
 
-import org.springframework.context.annotation.Bean;
+//import org.springdoc.core.GroupedOpenApi;
+//import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+//import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+//import springfox.documentation.builders.PathSelectors;
+//import springfox.documentation.builders.RequestHandlerSelectors;
+//import springfox.documentation.spi.DocumentationType;
+//import springfox.documentation.spring.web.plugins.Docket;
+//import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableSwagger2
+//@EnableSwagger2
+
 @Configuration
 @EnableWebSecurity
 public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -33,7 +35,7 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	//http://localhost:8080/swagger-ui.html
-	@Bean
+	/*@Bean
 	public Docket LMSProgramBatchApi() {
 		return  new Docket(DocumentationType.SWAGGER_2)
 				.select()
@@ -47,9 +49,17 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 	            //.pathMapping("/api")
 	           
 	            ;
-			}
+			}*/
+	// impl for swagger 3 - not needed
+	/*@Bean
+	  public GroupedOpenApi programBatchApi() {
+	      return GroupedOpenApi.builder()
+	              .group("com.demo.assignment")
+	              //.pathsToMatch("/public/**")
+	              .build();
+	  }*/
 
-	//@Override
+	//@Override not needed for swagger-2
 	/*public void addResourceHandlers(final ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");

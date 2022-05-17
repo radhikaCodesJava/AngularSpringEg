@@ -48,7 +48,7 @@ public class BatchRepoUnitTests {
 			Timestamp timestamp= Timestamp.valueOf(now);
 			//newProg= entityManager.persist(new programEntity(7,"Django",null, "nonActive",timestamp, timestamp, null));
 			newProg = new programEntity(7,"Django",null, "nonActive",timestamp, timestamp, null);
-			newBatch = new batchEntity(3,"03","SDET batch 15","active",10,timestamp,timestamp,newProg);
+			newBatch = new batchEntity(5,"03","SDET batch 15","active",10,timestamp,timestamp,newProg);
 		   }
 		
 		@AfterEach

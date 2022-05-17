@@ -49,7 +49,7 @@ public class programController {
 		return ResponseEntity.ok(programList);  
 	}  
 	
-	//creating a get mapping that retrieves the detail of a specific program
+	//retrieves the details of a specific program
 	@GetMapping(path="programs/{programId}", produces = "application/json")  
 	@ResponseBody
 	private ResponseEntity <programDTO> getOneProgramById(@PathVariable("programId") @NotBlank @Positive Integer programId)throws ResourceNotFoundException
@@ -57,7 +57,7 @@ public class programController {
 	return ResponseEntity.ok().body(progService.getProgramsById(programId));
 	}  
 			
-	//creating post mapping that post/creates the program detail in the database  
+	//post mapping that creates the program detail in the database  
 	@PostMapping(path="/saveprogram",consumes = "application/json", produces = "application/json")  
 	@ResponseBody
 	private ResponseEntity<?> createAndSaveProgram(@Valid @RequestBody programDTO newProgram)throws  DuplicateResourceFound
@@ -66,7 +66,7 @@ public class programController {
 	return ResponseEntity.status(HttpStatus.CREATED).body(savedProgramedDTO);  
 	} 
 				
-	//creating put mapping that updates the program detail by programId  
+	//put mapping that updates the program detail by programId  
 	@PutMapping(path="/putprogram/{programId}", consumes = "application/json", produces = "application/json")  
 	@ResponseBody
 	private ResponseEntity <programDTO> updateProgramById(@PathVariable("programId")@NotBlank @Positive Integer programId ,@Valid @RequestBody programDTO modifyProgram) throws ResourceNotFoundException
@@ -82,7 +82,7 @@ public class programController {
 	return ResponseEntity.ok(progService.updateProgramByName(programName,modifyProgram));
 	} 
 			 
-	//creating a delete mapping that deletes a specified program  
+	//delete mapping that deletes a specified program  
 	@DeleteMapping(path="/deletebyprogid/{programId}",produces = "application/json")  
 	@ResponseBody
 	private ResponseEntity<?>  deleteByProgramId(@PathVariable("programId")@NotBlank @Positive Integer programId) throws ResourceNotFoundException  
@@ -95,7 +95,7 @@ public class programController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}  
 			 
-	//creating a delete mapping that deletes a specified program by ProgramName  
+	//delete mapping that deletes a specified program by ProgramName  
 	@DeleteMapping(path="/deletebyprogname/{programName}",produces = "application/json")  
 	@ResponseBody
 	private ResponseEntity<?>  deleteByProgramName(@PathVariable("programName")@NotBlank @NotNull String programName) throws ResourceNotFoundException  

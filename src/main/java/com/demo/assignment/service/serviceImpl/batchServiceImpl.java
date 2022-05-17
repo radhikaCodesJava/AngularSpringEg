@@ -93,7 +93,7 @@ public class batchServiceImpl implements batchService {
 	}
 	
 	
-	//creating post  that saves the Batch detail in the database  
+	//creating Batch detail in the database  
 			public batchDTO createNewBatch(batchDTO batchDTO)throws  DuplicateResourceFound
 			{	
 				System.out.println("in start of post method in batchservice Impl");
@@ -139,7 +139,7 @@ public class batchServiceImpl implements batchService {
 				
 			
 			
-			//creating put  that updates the program detail by programId
+			//updates the batch detail by batchId
 			public batchDTO updateBatchById(Integer batchId,batchDTO modifyDTOBatch) throws ResourceNotFoundException
 			{
 				System.out.println("in updateBatchId method of batchServiceImpl");
@@ -180,7 +180,7 @@ public class batchServiceImpl implements batchService {
 			}
 		}
 			
-			//creating a delete that deletes a specified batch by batchId
+			//deletes a specified batch by batchId
 			public Boolean deleteByBatchId(Integer batchId) throws ResourceNotFoundException
 			{
 				System.out.println("in delete by batchId");

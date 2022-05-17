@@ -69,7 +69,7 @@ public class batchEntity implements Serializable{
 	@Column(name="batch_no_of_classes")
 	private Integer batch_num_classes;
 	
-	@Column(name="createion_time")
+	@Column(name="creation_time")
 	private Timestamp creation_time;
 	
 	@Column(name="last_mod_time")

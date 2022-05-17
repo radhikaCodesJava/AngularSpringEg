@@ -8,16 +8,21 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
+//import com.numpyninja.lms.exception.LmsError;
 
-@ControllerAdvice
+@RestControllerAdvice 
+//@ControllerAdvice
 public class GlobalExceptionHandler {
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -33,6 +38,19 @@ public class GlobalExceptionHandler {
 	    });
 		return new ResponseEntity<>( errors, HttpStatus.BAD_REQUEST);
 	} 
+	
+	/* from lmsPhase2 - another way without java 8 features
+	 * public class LmsServiceExceptionHandler {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public LmsError handleValidationError(MethodArgumentNotValidException ex) {
+        BindingResult bindingResult = ex.getBindingResult();
+        FieldError fieldError = bindingResult.getFieldError();
+        String defaultMessage = fieldError.getDefaultMessage();
+        return new LmsError("VALIDATION_FAILED", defaultMessage);
+    }
+	 */
 	
 	@ExceptionHandler ( IllegalArgumentException.class )
 	public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException exception,WebRequest request)
