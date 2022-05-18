@@ -64,7 +64,7 @@ public class ProgramRepoUnitTests {
 		assertNotNull(saveEntity);
 		assertThat(newProg).isNotNull();
 		
-	assertThat(saveEntity.getProgramId()).isEqualTo(newProg.getProgramId());
+	assertThat(saveEntity.getProgramId()).isEqualTo(saveEntity.getProgramId());
 	
 	}
 	
@@ -99,7 +99,7 @@ public class ProgramRepoUnitTests {
 		
 		//then-verify
 		assertNotNull(progEntity);
-		assertThat(progEntity.getProgramId()).isEqualTo(newProg.getProgramId());
+		assertThat(progEntity.getProgramId()).isEqualTo(intialSavedEntity.getProgramId());
 	}
 	
 	//junit test for get program by programName from repo
@@ -115,7 +115,7 @@ public class ProgramRepoUnitTests {
 		List<programEntity> progEntityList=progRepo.findByProgramName(initialSavedEntity.getProgram_name());
 		programEntity foundprogEntity =null;
 		for(programEntity rec:progEntityList) {
-			 if( rec.getProgram_name().equalsIgnoreCase(newProg.getProgram_name())) {
+			 if( rec.getProgram_name().equalsIgnoreCase(initialSavedEntity.getProgram_name())) {
 			   foundprogEntity =rec;
 			}
 		  }

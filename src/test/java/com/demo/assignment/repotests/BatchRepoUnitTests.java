@@ -25,6 +25,7 @@ import org.springframework.test.annotation.Rollback;
 
 import com.demo.assignment.entity.programEntity;
 import com.demo.assignment.repo.batchRepository;
+import com.demo.assignment.repo.programRepository;
 import com.demo.assignment.entity.batchEntity;
 
     //@SpringBootTest
@@ -33,8 +34,8 @@ import com.demo.assignment.entity.batchEntity;
 	@AutoConfigureTestDatabase(replace=Replace.NONE)
 public class BatchRepoUnitTests {
 	
-	@Autowired
-		private TestEntityManager entityManager;
+	//@Autowired
+		//private TestEntityManager entityManager;
 		
 		@Autowired
 		private batchRepository batchRepo;
@@ -47,7 +48,7 @@ public class BatchRepoUnitTests {
 			LocalDateTime now= LocalDateTime.now();
 			Timestamp timestamp= Timestamp.valueOf(now);
 			//newProg= entityManager.persist(new programEntity(7,"Django",null, "nonActive",timestamp, timestamp, null));
-			newProg = new programEntity(7,"Django",null, "nonActive",timestamp, timestamp, null);
+			newProg = new programEntity(9,"Django",null, "nonActive",timestamp, timestamp, null);
 			newBatch = new batchEntity(5,"03","SDET batch 15","active",10,timestamp,timestamp,newProg);
 		   }
 		
@@ -83,7 +84,9 @@ public class BatchRepoUnitTests {
 		public void testGetAllBatches(){
 			
 			//Given -setup
+			
 			batchEntity initialSaveBatch=batchRepo.save(newBatch);
+			
 			//when-action or behaviour that we are going to test
 			List<batchEntity> savedBatchEntityList=batchRepo.findAll();
 			
