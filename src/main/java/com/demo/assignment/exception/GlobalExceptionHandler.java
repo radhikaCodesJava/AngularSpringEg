@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     }
 	
 	@ExceptionHandler(DuplicateResourceFound.class )
-	public ResponseEntity<?> handleDuplicateResourceException(DuplicateResourceFound d, WebRequest request) {
+	public ResponseEntity<?> bb(DuplicateResourceFound d, WebRequest request) {
 		ErrorDetails errorDetails = new ErrorDetails(new Date(), d.getMessage(), request.getDescription(false) );
 		
 		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);

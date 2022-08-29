@@ -34,8 +34,8 @@ import com.demo.assignment.service.programService;
 @RequestMapping
 public class programController {
 	
-	@Autowired
-	programRepository progRepo;
+	//@Autowired
+	//programRepository progRepo;
 	
 	@Autowired
 	programService progService;

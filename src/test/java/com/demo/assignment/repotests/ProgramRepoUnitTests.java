@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -21,14 +22,22 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.demo.assignment.ProgramBatchDemoApplication;
 import com.demo.assignment.entity.batchEntity;
 import com.demo.assignment.entity.programEntity;
 import com.demo.assignment.repo.programRepository;
 
+
+
 //@SpringBootTest
 @DataJpaTest
 @AutoConfigureTestDatabase(replace=Replace.NONE)
+//@Transactional(propagation = Propagation.NOT_SUPPORTED)
+//@ContextConfiguration(classes=ProgramBatchDemoApplication.class)
 public class ProgramRepoUnitTests {
 
 	@Autowired
@@ -83,6 +92,9 @@ public class ProgramRepoUnitTests {
 		//then- verify the output
 		assertNotNull(listOfProgEntites);
 		assertThat(listOfProgEntites.size()).isGreaterThan(0);
+		
+		Assertions.assertThat(listOfProgEntites).extracting(programEntity::getProgram_name).containsAnyOf("Django");
+
 	}
 	
 	//junit test for get program by programId from repo

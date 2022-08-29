@@ -81,11 +81,11 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
-		</dependency>
+		</dependency>-->
 		
 <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 <dependency>
@@ -138,6 +138,15 @@
     <scope>test</scope>
 </dependency> -->
         <!-- End Mockito Configuration --> 
+
+<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-test</artifactId>
+    <!--<version>5.7.1</version> -->
+    <scope>test</scope>
+</dependency>
+
 	</dependencies>
 
 	<build>
