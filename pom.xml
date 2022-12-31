@@ -14,7 +14,7 @@
 	<name>program-batchDemo</name>
 	<description>implementation example for program-batch api java assignment</description>
 	<properties>
-		<java.version>15</java.version>
+		<java.version>17</java.version>
 <!-- automatically run annotation processors within the incremental compilation -->
  
   <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
